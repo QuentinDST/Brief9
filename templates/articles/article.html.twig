@@ -42,12 +42,13 @@
       </div>
     </div>
 
+
+    
     <div class="col-md-12">
       <div class="card commentaire">
         <div class="card-body text-center">
              {% for commentaire in commentaires %}
              <h5>{{ commentaire.utilisateur.pseudo }}</h5>
-             <hr>
             <div class="avis">
               <div class="note">
                 <h4>{{ commentaire.note }} / 10</h4>
@@ -55,6 +56,7 @@
               <div class="description">
                 <p>{{ commentaire.description }}</p>
               </div>
+              <hr class="hr--commentaire">
             </div>
             {% endfor %} 
         </div>
