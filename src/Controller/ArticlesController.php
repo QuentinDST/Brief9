@@ -44,7 +44,15 @@ class ArticlesController extends AbstractController
         if (!$jeu) {
             throw $this->createNotFoundException('Jeux non trouvé');
         }
-    
+
+        if (!$security->isGranted('IS_AUTHENTICATED_FULLY')) {
+        
+            return $this->redirectToRoute('app_login');
+        }
+        
+        $noteMoyenne = $avisRepository->getNoteMoyenne($jeu);
+        $noteMoyenne = number_format($noteMoyenne, 1);
+        /* dd($noteMoyenne); */
         $avis = new Avis();
         $avis->setUtilisateur($security->getUser());
         $avis->setJeux($jeu);
@@ -66,7 +74,8 @@ class ArticlesController extends AbstractController
         return $this->render('articles/article.html.twig', [
             'jeu' => $jeu,
             'avisForm' => $avisForm->createView(),
-            'commentaires' => $commentaires
+            'commentaires' => $commentaires,
+            'noteMoyenne' => $noteMoyenne
         ]);
     }
 }

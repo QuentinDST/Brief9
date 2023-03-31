@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Avis;
+use App\Entity\Jeux;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -37,6 +38,20 @@ class AvisRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function getNoteMoyenne(Jeux $jeux): float
+    {
+            $avis = $jeux->getAvis();
+        $count = count($avis);
+        if ($count == 0) {
+            return 0; // retourner la valeur par défaut
+        }
+        $sum = 0;
+        foreach ($avis as $a) {
+            $sum += $a->getNote();
+        }
+        return $sum / $count;
     }
 
 //    /**

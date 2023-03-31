@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Jeux;
 use App\Entity\Categorie;
+use App\Form\CategorieType;
 use App\Form\JeuxType;
 use App\Repository\JeuxRepository;
 use App\Repository\CategorieRepository;
@@ -130,28 +131,38 @@ class AdminController extends AbstractController
     }
 
     
-    #[Route('/supprimer/{id}', name: 'supprimer', methods: ['POST'])]
-    #[IsGranted('ROLE_ADMIN')]
-    public function supprimer(
-        EntityManagerInterface $manager, 
-        Jeux $jeux
-        ) : Response
+    #[Route('/categorie', name: 'ajouter', methods: ['GET', 'POST'])]
+    public function ajouterCategorie(
+        Request $request, 
+        EntityManagerInterface $manager,
+        CategorieRepository $categorieRepository): Response
     {
-        if(!$jeux){
-            $this->addFlash(
-                'warning',
-                'Le jeux n\a pas été trouvé !'
-            );
-            return $this->render('admin_index');
-        }
-        $manager->remove($jeux);
-        $manager->flush();
 
-        $this->addFlash(
-            'success',
-            'Jeux supprimé avec succès!'
-        );
-        return $this->redirectToRoute('admin_index');
+        $categorie = new Categorie;
+        $form = $this->createForm(CategorieType::class, $categorie);
+        $categorie = $categorieRepository->findAll();
+    
+        $form = $this->createForm(CategorieType::class, $categorie);
+    
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            $categorie = $form->getData();
+    
+            $manager->persist($categorie);
+            $manager->flush();
+    
+            $this->addFlash(
+                'success',
+                'La catégorie a été ajoutée avec succès !'
+            );
+    
+            return $this->redirectToRoute('admin_index');
+        }
+    
+        return $this->render('admin/ajouter.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
        
 } 
