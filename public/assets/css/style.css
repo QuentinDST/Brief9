@@ -53,6 +53,7 @@ body{
 .commentaire, .add--commentaire{
   background-color: rgb(242, 239, 239);
 }
+<<<<<<< HEAD
 
 .h5{
   text-decoration: underline 1px;
@@ -117,3 +118,5 @@ body{
 .commentaire, .add--commentaire{
   background-color: rgb(242, 239, 239);
 }
+=======
+>>>>>>> version_stable
